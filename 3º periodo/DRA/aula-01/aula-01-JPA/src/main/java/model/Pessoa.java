@@ -23,9 +23,18 @@ public class Pessoa {
         this.telefone = telefone;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -42,9 +51,14 @@ public class Pessoa {
         return telefone;
     }
 
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     @Override
     public String toString(){
         return "Pessoa{" +
+                "id='" + id + '\''+
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
