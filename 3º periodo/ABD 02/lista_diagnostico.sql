@@ -334,4 +334,68 @@ AND z.zoncodigo = 2
 AND est.estcodigo IN (1,3);
 
 
+-- Questão 22
+
+DESC grupoproduto;
+SELECT cidcodigo, cidnome FROM cidade;
+
+SELECT grp.grpdescricao 'Grupo', p.proativo 'Estado', cli.clinome 'Cliente', c.cidnome 'Cidade cliente'
+FROM grupoproduto grp
+INNER JOIN produto p ON p.progrpcodigo = grp.grpcodigo
+INNER JOIN itemvenda itv ON itv.itvvencodigo = p.procodigo 
+INNER JOIN venda ven ON ven.vencodigo = itv.itvvencodigo
+INNER JOIN cliente cli ON cli.clicodigo = ven.venclicodigo
+INNER JOIN bairro b ON b.baicodigo = cli.clibaicodigo
+INNER JOIN zona z ON z.zoncodigo = b.baizoncodigo
+INNER JOIN cidade c ON c.cidcodigo = z.zoncidcodigo
+WHERE p.proativo = '0' AND
+c.cidcodigo = 1;
+
+
+-- Questão 23
+
+DESC venda;
+
+-- Vendas totais de cada produto inativo
+SELECT
+p.proativo 'Estado', p.pronome 'Nome produto',
+SUM(itv.itvqtde) AS total_vendido
+FROM venda ven
+INNER JOIN itemvenda itv ON itv.itvvencodigo = ven.vencodigo
+INNER JOIN produto p ON p.procodigo = itv.itvprocodigo
+WHERE p.proativo = '0'
+GROUP BY p.proativo, p.pronome
+ORDER BY total_vendido DESC;
+
+-- Quantidade vendida de cada produto inativo
+SELECT 
+ven.vencodigo AS 'Código da Venda',
+p.pronome AS 'Nome do Produto',
+itv.itvqtde AS 'Quantidade Vendida'
+FROM venda ven
+INNER JOIN itemvenda itv ON itv.itvvencodigo = ven.vencodigo
+INNER JOIN produto p ON p.procodigo = itv.itvprocodigo
+WHERE p.proativo = '0';
+
+-- SUBQUERY
+
+SELECT 
+  p.pronome,
+  p.proativo,
+  (
+    SELECT SUM(itv.itvqtde)
+    FROM itemvenda itv
+    WHERE itv.itvprocodigo = p.procodigo
+  ) AS total_vendido
+FROM produto p
+WHERE p.proativo = '0'
+ORDER BY total_vendido DESC;
+
+-- Questão 24
+
+
+
+
+
+
 
