@@ -391,7 +391,49 @@ FROM produto p
 WHERE p.proativo = '0'
 ORDER BY total_vendido DESC;
 
+
 -- Questão 24
+
+SELECT * FROM grupoproduto;
+
+SELECT DISTINCT clinome, pronome, proativo, grpdescricao 
+FROM cliente
+INNER JOIN venda ON clicodigo = venclicodigo
+INNER JOIN itemvenda ON vencodigo = itvvencodigo
+INNER JOIN produto ON itvprocodigo = procodigo
+INNER JOIN grupoproduto ON progrpcodigo = grpcodigo
+WHERE proativo = '1'
+AND grpcodigo = 4
+ORDER BY clinome;
+
+
+-- Questão 25
+
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+
+DELIMITER $$
+
+CREATE FUNCTION fn_total_itens_comprados(p_clicodigo INT)
+RETURNS INT
+BEGIN
+	DECLARE v_total_itens INT;
+    
+    SELECT SUM(itvqtde) INTO v_total_itens
+    FROM itemvenda
+    INNER JOIN venda ON itvvencodigo = vencodigo
+    INNER JOIN cliente ON vencodigo = clicodigo
+    WHERE clicodigo = p_clicodigo;
+    
+    RETURN IFNULL(v_total_itens, 0);
+    
+END$$
+
+
+DELIMITER ;
+
+
+SELECT clinome , fn_total_itens_comprados(clicodigo) FROM cliente;
 
 
 
