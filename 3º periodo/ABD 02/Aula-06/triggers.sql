@@ -19,7 +19,7 @@ DELIMITER $$
 CREATE TRIGGER tg_atualizar_bairro_cliente AFTER UPDATE ON cliente
 FOR EACH ROW
 	BEGIN
-		IF NEW.clibaicodigo <> OLD.clibaicodigo THEN
+		IF NEW.clibaicodigo != OLD.clibaicodigo THEN
 			UPDATE bairro SET baiqtdepessoas = baiqtdepessoas + 1
 			WHERE baicodigo = NEW.clibaicodigo;
 			
